@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Opiniones Libres</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #8C0000, #D90000);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #550000;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            margin-top: 20px;
+            color: white;
+        }
+        .header img {
+            width: 50px;
+            height: auto;
+            margin-right: 15px;
+        }
+        .content {
+            width: 80%;
+            max-width: 900px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            color: black;
+        }
+        .content img {
+            width: 50%;
+            max-width: 200px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        audio, video {
+            width: 100%;
+            max-width: 600px;
+            margin: 10px 0;
+        }
+        .back-button {
+            margin: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo">
+        <h1>Opiniones Libres</h1>
+    </div>
+    
+    <button class="back-button" onclick="window.history.back()">⬅️ Volver</button>
+    
+    <div class="content">
+        <img src="https://static.vecteezy.com/system/resources/thumbnails/022/493/595/small/3d-question-mark-icon-or-ask-faq-answer-solution-isolated-on-transparent-background-file-png.png" alt="Sobre la plataforma">
+        <p><strong>Opiniones Libres</strong> es una plataforma creada para que los estudiantes compartan sus experiencias y opiniones sobre los profesores, ayudando a otros a tomar decisiones informadas sobre sus clases, cuenta con profesores desde el segundo hasta el último semestre.</p>
+        
+        <h2>Audios Explicativos</h2>
+        <audio controls>
+            <source src="audio1.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
+        <audio controls>
+            <source src="audio2.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
+        
+        <h2>Video Explicativo</h2>
+        <video controls>
+            <source src="video.mp4" type="video/mp4">
+            Tu navegador no soporta el elemento de video.
+        </video>
+    </div>
+    
+    <footer>
+        <p>Contacto: opinioneslibres@unilibre.edu.co</p>
+        <p>&copy; Opiniones Libres, Estudiantes de 3er semestre, Universidad Libre</p>
+    </footer>
+</body>
+</html>
