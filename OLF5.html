@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foro de Opiniones - Juliana Ramirez</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #8C0000, #D90000);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #550000;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            margin-top: 20px;
+            color: white;
+        }
+        .header img {
+            width: 50px;
+            height: auto;
+            margin-right: 15px;
+        }
+        .back-button {
+            margin: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .forum-container {
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            color: black;
+            text-align: center;
+        }
+        .professor-img {
+            width: 450px;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        input, textarea {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+        textarea {
+            height: 80px;
+        }
+        .rating {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .star {
+            font-size: 30px;
+            cursor: pointer;
+            color: gray;
+        }
+        .star:hover,
+        .star.active {
+            color: gold;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #8C0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-secondary {
+            background: #333;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo">
+        <h1>Opiniones Libres</h1>
+    </div>
+
+    <button class="back-button" onclick="window.history.back()">⬅️ Volver</button>
+    
+    <div class="forum-container">
+        <img class="professor-img" src="https://static9.depositphotos.com/1070812/1091/i/450/depositphotos_10916856-stock-photo-teacher-on-background-of-blackboard.jpg" alt="Foto del Profesor">
+        <h2>Juliana Ramirez</h2>
+        <p><strong>Profesión:</strong> Ingeniera en Sistemas</p>
+        <p><strong>Materia:</strong> Programación 1</p>
+
+        <h3>Tu Nombre:</h3>
+        <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí...">
+
+        <h3>Tu Opinión:</h3>
+        <textarea id="reviewInput" placeholder="Escribe tu opinión aquí..."></textarea>
+        
+        <h3>Calificación:</h3>
+        <div class="rating">
+            <span class="star" onclick="rate(1)">⭐</span>
+            <span class="star" onclick="rate(2)">⭐</span>
+            <span class="star" onclick="rate(3)">⭐</span>
+            <span class="star" onclick="rate(4)">⭐</span>
+            <span class="star" onclick="rate(5)">⭐</span>
+        </div>
+        
+        <div class="button-container">
+            <button class="btn" onclick="submitReview()">Enviar Opinión</button>
+            <button class="btn btn-secondary" onclick="window.location.href='OLV5.html'">Ver Reseñas</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Contacto: opinioneslibres@unilibre.edu.co</p>
+        <p>&copy; Opiniones Libres, Estudiantes de 3er semestre, Universidad Libre</p>
+    </footer>
+    
+    <script>
+        let selectedRating = 0;
+
+        function rate(stars) {
+            selectedRating = stars;
+            document.querySelectorAll('.star').forEach((el, index) => {
+                el.classList.toggle('active', index < stars);
+            });
+        }
+
+        function submitReview() {
+            let name = document.getElementById("nameInput").value.trim();
+            let review = document.getElementById("reviewInput").value.trim();
+
+            if (name === "" || review === "" || selectedRating === 0) {
+                alert("Por favor, completa todos los campos y selecciona una calificación.");
+                return;
+            }
+
+            let reviews = JSON.parse(localStorage.getItem("reviews_juliana_ramirez")) || [];
+
+            reviews.push({
+                name: name,
+                comment: review,
+                rating: selectedRating
+            });
+
+            localStorage.setItem("reviews_juliana_ramirez", JSON.stringify(reviews));
+
+            alert("Reseña enviada con éxito.");
+            document.getElementById("nameInput").value = "";
+            document.getElementById("reviewInput").value = "";
+            selectedRating = 0;
+            document.querySelectorAll('.star').forEach(el => el.classList.remove('active'));
+        }
+    </script>
+</body>
+</html>

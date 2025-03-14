@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseñas - Juliana Ramírez</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #8C0000, #D90000);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #550000;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            margin-top: 20px;
+            color: white;
+        }
+        .header img {
+            width: 50px;
+            height: auto;
+            margin-right: 15px;
+        }
+        .back-button {
+            margin: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .forum-container {
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            color: black;
+            text-align: center;
+        }
+        .professor-img {
+            width: 450px;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .review-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            color: black;
+            text-align: left;
+            position: relative;
+        }
+        .review-box p {
+            margin: 5px 0;
+        }
+        .rating {
+            color: gold;
+            font-size: 20px;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .average-rating {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo">
+        <h1>Reseñas de Juliana Ramírez</h1>
+    </div>
+
+    <button class="back-button" onclick="window.history.back()">⬅️ Volver</button>
+    
+    <div class="forum-container">
+        <img class="professor-img" src="https://static9.depositphotos.com/1070812/1091/i/450/depositphotos_10916856-stock-photo-teacher-on-background-of-blackboard.jpg" alt="Foto del Profesor">
+        <h2>Juliana Ramírez</h2>
+        <p><strong>Profesión:</strong> Ingeniera en Sistemas</p>
+        <p><strong>Materia:</strong> Programación 1</p>
+
+        <h3>Calificación promedio: <span id="averageRating" class="average-rating">N/A</span></h3>
+
+        <h3>Opiniones de los estudiantes:</h3>
+        <div id="reviewsContainer"></div>
+    </div>
+    
+    <footer>
+        <p>Contacto: opinioneslibres@unilibre.edu.co</p>
+        <p>&copy; Opiniones Libres, Estudiantes de 3er semestre, Universidad Libre</p>
+    </footer>
+    
+    <script>
+        function loadReviews() {
+            let reviews = JSON.parse(localStorage.getItem("reviews_juliana_ramirez")) || [];
+            let container = document.getElementById("reviewsContainer");
+            let averageContainer = document.getElementById("averageRating");
+
+            container.innerHTML = ""; 
+
+            if (reviews.length === 0) {
+                averageContainer.innerHTML = "N/A";
+                container.innerHTML = "<p>No hay reseñas aún. Sé el primero en dejar una opinión.</p>";
+                return;
+            }
+
+            let totalRating = 0;
+
+            reviews.forEach((review, index) => {
+                let reviewBox = document.createElement("div");
+                reviewBox.classList.add("review-box");
+
+                let stars = "⭐".repeat(review.rating) + "☆".repeat(5 - review.rating);
+
+                reviewBox.innerHTML = `
+                    <p><strong>${review.name}</strong></p>
+                    <p class="rating">${stars}</p>
+                    <p>${review.comment}</p>
+                    <button class="delete-btn" onclick="deleteReview(${index})">Eliminar</button>
+                `;
+
+                container.appendChild(reviewBox);
+                totalRating += review.rating;
+            });
+
+            let average = (totalRating / reviews.length).toFixed(1);
+            let averageStars = "⭐".repeat(Math.round(average)) + "☆".repeat(5 - Math.round(average));
+            averageContainer.innerHTML = `${averageStars} (${average} / 5)`;
+        }
+
+        function deleteReview(index) {
+            let reviews = JSON.parse(localStorage.getItem("reviews_juliana_ramirez")) || [];
+            if (confirm("¿Seguro que deseas eliminar esta reseña?")) {
+                reviews.splice(index, 1);
+                localStorage.setItem("reviews_juliana_ramirez", JSON.stringify(reviews));
+                loadReviews(); // Recargar las reseñas actualizadas
+            }
+        }
+
+        window.onload = loadReviews;
+    </script>
+</body>
+</html>
+
