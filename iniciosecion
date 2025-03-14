@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opiniones Libres</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #8C0000, #D90000);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        .sidebar, .right-sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .container {
+            width: 350px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            text-align: center;
+            color: black;
+            position: relative;
+        }
+        img {
+            width: 60%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #8C0000;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 95%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #8C0000, #D90000);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #D90000, #8C0000);
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px rgba(140, 0, 0, 0.5);
+        }
+        .forgot-password {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .forgot-password a {
+            color: white;
+            text-decoration: none;
+        }
+        .icon-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .icon-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            width: 48%;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-container">
+        <h1>Opiniones Libres</h1>
+        <p>Comparte y consulta opiniones de profesores para ayudar a otros estudiantes.</p>
+    </div>
+    
+    <div class="content">
+        <div class="sidebar">
+            <h3>Información útil</h3>
+            <p>Consulta las opiniones más recientes sobre los profesores de la universidad.</p>
+            <p>Ayuda a otros dejando tu experiencia y calificando las clases.</p>
+        </div>
+        
+        <div class="container">
+            <img src="https://images.seeklogo.com/logo-png/14/2/universidad-libre-logo-png_seeklogo-145755.png" alt="Opiniones de profesores">
+            <div class="input-container">
+                <input type="text" placeholder="Usuario">
+                <input type="password" placeholder="Contraseña">
+            </div>
+            <button onclick="window.location.href='OLP1.html'">Iniciar Sesión</button>
+            <button onclick="window.location.href='OLP1inv.html'">Ingresar como Invitado</button>
+            <div class="icon-buttons">
+                <button class="icon-button">🔵 Face ID</button>
+                <button class="icon-button">🎤 Voz</button>
+            </div>
+        </div>
+        
+        <div class="right-sidebar">
+            <h3>Consejos</h3>
+            <p>Lee y compara opiniones antes de elegir un profesor.</p>
+            <p>Respeta las normas de la comunidad al dejar una reseña.</p>
+        </div>
+    </div>
+    
+    <div class="forgot-password">
+        <a href="#">¿Olvidaste tu contraseña?</a>
+    </div>
+    
+    <footer>
+        <p>Contacto: opinioneslibres@unilibre.edu.co</p>
+        <p>&copy; Opiniones Libres, Estudiantes de 3er semestre, Universidad Libre</p>
+    </footer>
+</body>
+</html>
