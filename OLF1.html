@@ -78,11 +78,23 @@
             font-size: 30px;
             cursor: pointer;
             color: gray;
+            transition: transform 0.3s;
         }
         .star:hover,
         .star.active {
             color: gold;
         }
+
+        /* Animación estrella seleccionada */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        .star.animate {
+            animation: pop 0.3s ease;
+        }
+
         .button-container {
             display: flex;
             justify-content: center;
@@ -159,6 +171,13 @@
             selectedRating = stars;
             document.querySelectorAll('.star').forEach((el, index) => {
                 el.classList.toggle('active', index < stars);
+
+                // Reinicia y activa la animación solo en estrellas seleccionadas
+                if (index < stars) {
+                    el.classList.remove('animate'); // Quita si ya tenía animación
+                    void el.offsetWidth; // Hack para reiniciar animación
+                    el.classList.add('animate');
+                }
             });
         }
 
@@ -186,8 +205,9 @@
             document.getElementById("nameInput").value = "";
             document.getElementById("reviewInput").value = "";
             selectedRating = 0;
-            document.querySelectorAll('.star').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.star').forEach(el => el.classList.remove('active', 'animate'));
         }
     </script>
 </body>
 </html>
+
