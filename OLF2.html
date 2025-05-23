@@ -78,36 +78,29 @@
             font-size: 30px;
             cursor: pointer;
             user-select: none;
-            color: gray;
-            transition: color 0.3s;
-        }
-        /* Estrellas seleccionadas doradas */
-        .star.active {
-            color: gold;
-        }
-        /* Las estrellas no seleccionadas serán un círculo gris */
-        .star.inactive {
-            color: gray;
-        }
-        .star.inactive::before {
-            content: "⚪";
-        }
-        .star.active::before {
-            content: "⭐";
-        }
-        /* Ocultamos el texto original (para que solo aparezca el contenido con ::before) */
-        .star {
             color: transparent;
             position: relative;
+            transition: color 0.3s;
         }
-        .star::before {
-            position: relative;
+        /* Por defecto, las estrellas muestran un círculo gris */
+        .star.inactive::before {
+            content: "⚪";
             color: gray;
+            position: absolute;
+            left: 0;
+            top: 0;
             font-size: 30px;
             pointer-events: none;
         }
+        /* Estrellas activas en dorado */
         .star.active::before {
+            content: "⭐";
             color: gold;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 30px;
+            pointer-events: none;
         }
 
         /* Animación estrella seleccionada */
@@ -171,11 +164,11 @@
         
         <h3>Calificación:</h3>
         <div class="rating">
-            <span class="star" onclick="rate(1)">⭐</span>
-            <span class="star" onclick="rate(2)">⭐</span>
-            <span class="star" onclick="rate(3)">⭐</span>
-            <span class="star" onclick="rate(4)">⭐</span>
-            <span class="star" onclick="rate(5)">⭐</span>
+            <span class="star inactive" onclick="rate(1)">⭐</span>
+            <span class="star inactive" onclick="rate(2)">⭐</span>
+            <span class="star inactive" onclick="rate(3)">⭐</span>
+            <span class="star inactive" onclick="rate(4)">⭐</span>
+            <span class="star inactive" onclick="rate(5)">⭐</span>
         </div>
         
         <div class="button-container">
@@ -201,7 +194,7 @@
                     el.classList.remove('inactive');
                     // Animación
                     el.classList.remove('animate');
-                    void el.offsetWidth;
+                    void el.offsetWidth; // reflow para reiniciar animación
                     el.classList.add('animate');
                 } else {
                     el.classList.remove('active');
@@ -235,10 +228,12 @@
             document.getElementById("reviewInput").value = "";
             selectedRating = 0;
             document.querySelectorAll('.star').forEach(el => {
-                el.classList.remove('active', 'inactive', 'animate');
+                el.classList.remove('active', 'animate');
+                el.classList.add('inactive');
             });
         }
     </script>
 </body>
 </html>
+
 
