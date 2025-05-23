@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Foro de Opiniones - Mauricio Castaño</title>
     <style>
         body {
@@ -77,12 +77,42 @@
         .star {
             font-size: 30px;
             cursor: pointer;
+            user-select: none;
+            color: transparent;
+            position: relative;
+            transition: color 0.3s;
+        }
+        /* Por defecto, las estrellas muestran un círculo gris */
+        .star.inactive::before {
+            content: "⚪";
             color: gray;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 30px;
+            pointer-events: none;
         }
-        .star:hover,
-        .star.active {
+        /* Estrellas activas en dorado */
+        .star.active::before {
+            content: "⭐";
             color: gold;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 30px;
+            pointer-events: none;
         }
+
+        /* Animación estrella seleccionada */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        .star.animate::before {
+            animation: pop 0.3s ease;
+        }
+
         .button-container {
             display: flex;
             justify-content: center;
@@ -114,31 +144,31 @@
 <body>
 
     <div class="header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo" />
         <h1>Opiniones Libres</h1>
     </div>
 
     <button class="back-button" onclick="window.history.back()">⬅️ Volver</button>
     
     <div class="forum-container">
-        <img class="professor-img" src="https://www.aulaplaneta.com/sites/default/files/styles/article_detail/public/articles/images/recurso364.jpeg?itok=UgxFtRt1" alt="Foto del Profesor">
+        <img class="professor-img" src="https://www.aulaplaneta.com/sites/default/files/styles/article_detail/public/articles/images/recurso364.jpeg?itok=UgxFtRt1" alt="Foto del Profesor" />
         <h2>Mauricio Castaño</h2>
         <p><strong>Profesión:</strong> Abogado (Lic. en Derecho)</p>
         <p><strong>Materia:</strong> Constitución Política</p>
 
         <h3>Tu Nombre:</h3>
-        <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí...">
+        <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí..." />
 
         <h3>Tu Opinión:</h3>
         <textarea id="reviewInput" placeholder="Escribe tu opinión aquí..."></textarea>
         
         <h3>Calificación:</h3>
         <div class="rating">
-            <span class="star" onclick="rate(1)">⭐</span>
-            <span class="star" onclick="rate(2)">⭐</span>
-            <span class="star" onclick="rate(3)">⭐</span>
-            <span class="star" onclick="rate(4)">⭐</span>
-            <span class="star" onclick="rate(5)">⭐</span>
+            <span class="star inactive" onclick="rate(1)">⭐</span>
+            <span class="star inactive" onclick="rate(2)">⭐</span>
+            <span class="star inactive" onclick="rate(3)">⭐</span>
+            <span class="star inactive" onclick="rate(4)">⭐</span>
+            <span class="star inactive" onclick="rate(5)">⭐</span>
         </div>
         
         <div class="button-container">
@@ -157,13 +187,19 @@
 
         function rate(stars) {
             selectedRating = stars;
-            document.querySelectorAll('.star').forEach((el, index) => {
-                el.classList.toggle('active', index < stars);
-
-                if (index < stars) {
-                    el.classList.remove('animate'); // Reinicia animación
-                    void el.offsetWidth; // Forzar reflow
+            const starsEls = document.querySelectorAll('.star');
+            starsEls.forEach((el, index) => {
+                if(index < stars){
+                    el.classList.add('active');
+                    el.classList.remove('inactive');
+                    // Animación
+                    el.classList.remove('animate');
+                    void el.offsetWidth; // reflow para reiniciar animación
                     el.classList.add('animate');
+                } else {
+                    el.classList.remove('active');
+                    el.classList.add('inactive');
+                    el.classList.remove('animate');
                 }
             });
         }
@@ -177,7 +213,7 @@
                 return;
             }
 
-            let reviews = JSON.parse(localStorage.getItem("reviewsLuisSanchez")) || [];
+            let reviews = JSON.parse(localStorage.getItem("reviewsMauricioCastano")) || [];
 
             reviews.push({
                 name: name,
@@ -185,14 +221,18 @@
                 rating: selectedRating
             });
 
-            localStorage.setItem("reviewsLuisSanchez", JSON.stringify(reviews));
+            localStorage.setItem("reviewsMauricioCastano", JSON.stringify(reviews));
 
             alert("Reseña enviada con éxito.");
             document.getElementById("nameInput").value = "";
             document.getElementById("reviewInput").value = "";
             selectedRating = 0;
-            document.querySelectorAll('.star').forEach(el => el.classList.remove('active', 'animate'));
+            document.querySelectorAll('.star').forEach(el => {
+                el.classList.remove('active', 'animate');
+                el.classList.add('inactive');
+            });
         }
     </script>
 </body>
 </html>
+
