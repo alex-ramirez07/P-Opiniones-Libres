@@ -57,7 +57,7 @@
 
     .btn-volver {
       background: #555;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
     footer {
@@ -80,8 +80,12 @@
   <div class="login-container">
     <h2>Inicio de Sesión con Voz</h2>
     <p>Presiona el botón y di la frase secreta: <strong>"abrir sesión"</strong></p>
-    <button class="btn" onclick="iniciarReconocimiento()">🎙️ Hablar</button>
-    <button class="btn btn-volver" onclick="history.back()">⬅ Volver</button>
+    
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <button class="btn" onclick="iniciarReconocimiento()">🎙️ Hablar</button>
+      <button class="btn btn-volver" onclick="history.back()">⬅ Volver</button>
+    </div>
+    
     <p id="resultado" style="margin-top: 20px; font-weight: bold;"></p>
   </div>
 
@@ -118,7 +122,6 @@
           setTimeout(() => {
             window.location.href = 'OLP1.html';
           }, 1000);
-
         } else {
           resultado.textContent = "❌ Frase incorrecta: " + texto;
           resultado.style.color = "red";
