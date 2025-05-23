@@ -53,11 +53,17 @@
       cursor: pointer;
       font-size: 18px;
       margin-top: 20px;
+      width: 220px;
     }
 
     .btn:disabled {
       background: #aaa;
       cursor: not-allowed;
+    }
+
+    .btn-volver {
+      background: #555;
+      margin-top: 10px;
     }
 
     footer {
@@ -81,6 +87,7 @@
     <h2>Inicio de Sesión con Face ID</h2>
     <p>Haz clic para autenticarte con tu rostro, huella o PIN.</p>
     <button class="btn" id="loginBtn">🔓 Iniciar Sesión Biométrica</button>
+    <button class="btn btn-volver" id="volverBtn">⬅ Volver</button>
     <p id="message" style="margin-top:20px; font-weight:bold;"></p>
   </div>
 
@@ -91,11 +98,13 @@
 
   <script>
     const loginBtn = document.getElementById('loginBtn');
+    const volverBtn = document.getElementById('volverBtn');
     const message = document.getElementById('message');
 
     loginBtn.addEventListener('click', async () => {
       if (!window.PublicKeyCredential) {
         message.textContent = "Tu navegador no soporta autenticación biométrica (WebAuthn).";
+        message.style.color = "red";
         return;
       }
 
@@ -120,6 +129,10 @@
         message.textContent = "❌ Error al autenticar: " + err.message;
         message.style.color = "red";
       }
+    });
+
+    volverBtn.addEventListener('click', () => {
+      history.back();
     });
   </script>
 
