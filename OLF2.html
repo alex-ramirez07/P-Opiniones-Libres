@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Foro de Opiniones - Luis Sanchez</title>
     <style>
         body {
@@ -77,10 +77,36 @@
         .star {
             font-size: 30px;
             cursor: pointer;
+            user-select: none;
+            color: gray;
+            transition: color 0.3s;
+        }
+        /* Estrellas seleccionadas doradas */
+        .star.active {
+            color: gold;
+        }
+        /* Las estrellas no seleccionadas serán un círculo gris */
+        .star.inactive {
             color: gray;
         }
-        .star:hover,
-        .star.active {
+        .star.inactive::before {
+            content: "⚪";
+        }
+        .star.active::before {
+            content: "⭐";
+        }
+        /* Ocultamos el texto original (para que solo aparezca el contenido con ::before) */
+        .star {
+            color: transparent;
+            position: relative;
+        }
+        .star::before {
+            position: relative;
+            color: gray;
+            font-size: 30px;
+            pointer-events: none;
+        }
+        .star.active::before {
             color: gold;
         }
 
@@ -90,7 +116,7 @@
             50% { transform: scale(1.5); }
             100% { transform: scale(1); }
         }
-        .star.animate {
+        .star.animate::before {
             animation: pop 0.3s ease;
         }
 
@@ -125,20 +151,20 @@
 <body>
 
     <div class="header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo" />
         <h1>Opiniones Libres</h1>
     </div>
 
     <button class="back-button" onclick="window.history.back()">⬅️ Volver</button>
     
     <div class="forum-container">
-        <img class="professor-img" src="https://media.istockphoto.com/id/1278976696/es/foto/hombre-maduro-profesor-de-pie-en-clase.jpg?s=612x612&w=0&k=20&c=1jZHwAzoTv9LC_mRFY8i6Ny62a0E5ES7Y26rk47x4K8=" alt="Foto del Profesor">
+        <img class="professor-img" src="https://media.istockphoto.com/id/1278976696/es/foto/hombre-maduro-profesor-de-pie-en-clase.jpg?s=612x612&w=0&k=20&c=1jZHwAzoTv9LC_mRFY8i6Ny62a0E5ES7Y26rk47x4K8=" alt="Foto del Profesor" />
         <h2>Luis Sanchez</h2>
         <p><strong>Profesión:</strong> Licenciado en Filosofía</p>
         <p><strong>Materia:</strong> Cátedra de la Paz</p>
         
         <h3>Tu Nombre:</h3>
-        <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí...">
+        <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí..." />
 
         <h3>Tu Opinión:</h3>
         <textarea id="reviewInput" placeholder="Escribe tu opinión aquí..."></textarea>
@@ -168,13 +194,19 @@
 
         function rate(stars) {
             selectedRating = stars;
-            document.querySelectorAll('.star').forEach((el, index) => {
-                el.classList.toggle('active', index < stars);
-
-                if (index < stars) {
-                    el.classList.remove('animate'); // Reinicia animación
-                    void el.offsetWidth; // Forzar reflow
+            const starsEls = document.querySelectorAll('.star');
+            starsEls.forEach((el, index) => {
+                if(index < stars){
+                    el.classList.add('active');
+                    el.classList.remove('inactive');
+                    // Animación
+                    el.classList.remove('animate');
+                    void el.offsetWidth;
                     el.classList.add('animate');
+                } else {
+                    el.classList.remove('active');
+                    el.classList.add('inactive');
+                    el.classList.remove('animate');
                 }
             });
         }
@@ -202,8 +234,11 @@
             document.getElementById("nameInput").value = "";
             document.getElementById("reviewInput").value = "";
             selectedRating = 0;
-            document.querySelectorAll('.star').forEach(el => el.classList.remove('active', 'animate'));
+            document.querySelectorAll('.star').forEach(el => {
+                el.classList.remove('active', 'inactive', 'animate');
+            });
         }
     </script>
 </body>
 </html>
+
