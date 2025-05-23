@@ -128,7 +128,7 @@
     
     <script>
         function loadReviews() {
-            let reviews = JSON.parse(localStorage.getItem("reviews_juliana_ramirez")) || [];
+            let reviews = JSON.parse(localStorage.getItem("reviewsJulianaRamirez")) || [];
             let container = document.getElementById("reviewsContainer");
             let averageContainer = document.getElementById("averageRating");
 
@@ -165,10 +165,10 @@
         }
 
         function deleteReview(index) {
-            let reviews = JSON.parse(localStorage.getItem("reviews_juliana_ramirez")) || [];
+            let reviews = JSON.parse(localStorage.getItem("reviewsJulianaRamirez")) || [];
             if (confirm("¿Seguro que deseas eliminar esta reseña?")) {
                 reviews.splice(index, 1);
-                localStorage.setItem("reviews_juliana_ramirez", JSON.stringify(reviews));
+                localStorage.setItem("reviewsJulianaRamirez", JSON.stringify(reviews));
                 loadReviews(); // Recargar las reseñas actualizadas
             }
         }
