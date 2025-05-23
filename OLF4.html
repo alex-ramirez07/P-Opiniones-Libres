@@ -159,6 +159,12 @@
             selectedRating = stars;
             document.querySelectorAll('.star').forEach((el, index) => {
                 el.classList.toggle('active', index < stars);
+
+                if (index < stars) {
+                    el.classList.remove('animate'); // Reinicia animación
+                    void el.offsetWidth; // Forzar reflow
+                    el.classList.add('animate');
+                }
             });
         }
 
@@ -171,7 +177,7 @@
                 return;
             }
 
-            let reviews = JSON.parse(localStorage.getItem("reviewsJaimeBlanco")) || [];
+            let reviews = JSON.parse(localStorage.getItem("reviewsLuisSanchez")) || [];
 
             reviews.push({
                 name: name,
@@ -179,13 +185,13 @@
                 rating: selectedRating
             });
 
-            localStorage.setItem("reviewsJaimeBlanco", JSON.stringify(reviews));
+            localStorage.setItem("reviewsLuisSanchez", JSON.stringify(reviews));
 
             alert("Reseña enviada con éxito.");
             document.getElementById("nameInput").value = "";
             document.getElementById("reviewInput").value = "";
             selectedRating = 0;
-            document.querySelectorAll('.star').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.star').forEach(el => el.classList.remove('active', 'animate'));
         }
     </script>
 </body>
