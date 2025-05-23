@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foro de Opiniones - Jaime Blanco</title>
+    <title>Reseñas - Jaime Blanco</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #FFFFFF, #E0E0E0);
+            background: linear-gradient(135deg, #8C0000, #D90000);
             color: white;
             display: flex;
             flex-direction: column;
@@ -57,73 +57,38 @@
             display: block;
             margin: 0 auto 10px;
         }
-        input, textarea {
-            width: 90%;
-            padding: 10px;
+        .review-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
             margin-top: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            resize: none;
+            border-radius: 10px;
+            color: black;
+            text-align: left;
+            position: relative;
         }
-        textarea {
-            height: 80px;
+        .review-box p {
+            margin: 5px 0;
         }
         .rating {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 10px;
-        }
-        .star {
-            font-size: 30px;
-            cursor: pointer;
-            color: transparent;
-            position: relative;
-            transition: color 0.3s;
-        }
-        .star.inactive::before {
-            content: "⚪";
-            color: gray;
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-size: 30px;
-            pointer-events: none;
-        }
-        .star.active::before {
-            content: "⭐";
             color: gold;
+            font-size: 20px;
+        }
+        .delete-btn {
             position: absolute;
-            left: 0;
-            top: 0;
-            font-size: 30px;
-            pointer-events: none;
-        }
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.5); }
-            100% { transform: scale(1); }
-        }
-        .star.animate::before {
-            animation: pop 0.3s ease;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .btn {
-            padding: 10px 20px;
-            background: #8C0000;
+            top: 10px;
+            right: 10px;
+            background: red;
             color: white;
             border: none;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
         }
-        .btn-secondary {
-            background: #333;
+        .average-rating {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 10px;
         }
         footer {
             margin-top: 50px;
@@ -139,7 +104,7 @@
 
     <div class="header">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo">
-        <h1>Opiniones Libres</h1>
+        <h1>Reseñas de Jaime Blanco</h1>
     </div>
 
     <button class="back-button" onclick="window.history.back()">⬅️ Volver</button>
@@ -147,28 +112,13 @@
     <div class="forum-container">
         <img class="professor-img" src="https://www.hojadellunes.com/wp-content/uploads/2022/03/viejo-profesor-mostrando-aula_23-2148201060.jpg" alt="Foto del Profesor">
         <h2>Jaime Blanco</h2>
-        <p><strong>Profesión:</strong> Contador Público</p>
-        <p><strong>Materia:</strong> Impuestos</p>
+        <p><strong>Profesión:</strong> Abogado</p>
+        <p><strong>Materia:</strong> Constitución Política</p>
 
-        <h3>Tu Nombre:</h3>
-        <input type="text" id="nameInput" placeholder="Escribe tu nombre aquí...">
+        <h3>Calificación promedio: <span id="averageRating" class="average-rating">N/A</span></h3>
 
-        <h3>Tu Opinión:</h3>
-        <textarea id="reviewInput" placeholder="Escribe tu opinión aquí..."></textarea>
-        
-        <h3>Calificación:</h3>
-        <div class="rating">
-            <span class="star inactive" onclick="rate(1)">⭐</span>
-            <span class="star inactive" onclick="rate(2)">⭐</span>
-            <span class="star inactive" onclick="rate(3)">⭐</span>
-            <span class="star inactive" onclick="rate(4)">⭐</span>
-            <span class="star inactive" onclick="rate(5)">⭐</span>
-        </div>
-        
-        <div class="button-container">
-            <button class="btn" onclick="submitReview()">Enviar Opinión</button>
-            <button class="btn btn-secondary" onclick="window.location.href='OLV4.html'">Ver Reseñas</button>
-        </div>
+        <h3>Opiniones de los estudiantes:</h3>
+        <div id="reviewsContainer"></div>
     </div>
     
     <footer>
@@ -177,54 +127,53 @@
     </footer>
     
     <script>
-        let selectedRating = 0;
+        function loadReviews() {
+            let reviews = JSON.parse(localStorage.getItem("reviewsJaimeBlanco")) || [];
+            let container = document.getElementById("reviewsContainer");
+            let averageContainer = document.getElementById("averageRating");
 
-        function rate(stars) {
-            selectedRating = stars;
-            const starsEls = document.querySelectorAll('.star');
-            starsEls.forEach((el, index) => {
-                if(index < stars){
-                    el.classList.add('active');
-                    el.classList.remove('inactive');
-                    el.classList.remove('animate');
-                    void el.offsetWidth;
-                    el.classList.add('animate');
-                } else {
-                    el.classList.remove('active');
-                    el.classList.add('inactive');
-                    el.classList.remove('animate');
-                }
-            });
-        }
+            container.innerHTML = ""; 
 
-        function submitReview() {
-            let name = document.getElementById("nameInput").value.trim();
-            let review = document.getElementById("reviewInput").value.trim();
-
-            if (name === "" || review === "" || selectedRating === 0) {
-                alert("Por favor, completa todos los campos y selecciona una calificación.");
+            if (reviews.length === 0) {
+                averageContainer.innerHTML = "N/A";
+                container.innerHTML = "<p>No hay reseñas aún. Sé el primero en dejar una opinión.</p>";
                 return;
             }
 
-            let reviews = JSON.parse(localStorage.getItem("reviewsJaimeBlanco")) || [];
+            let totalRating = 0;
 
-            reviews.push({
-                name: name,
-                comment: review,
-                rating: selectedRating
+            reviews.forEach((review, index) => {
+                let reviewBox = document.createElement("div");
+                reviewBox.classList.add("review-box");
+
+                let stars = "⭐".repeat(review.rating) + "☆".repeat(5 - review.rating);
+
+                reviewBox.innerHTML = `
+                    <p><strong>${review.name}</strong></p>
+                    <p class="rating">${stars}</p>
+                    <p>${review.comment}</p>
+                    <button class="delete-btn" onclick="deleteReview(${index})">Eliminar</button>
+                `;
+
+                container.appendChild(reviewBox);
+                totalRating += review.rating;
             });
 
-            localStorage.setItem("reviewsJaimeBlanco", JSON.stringify(reviews));
-
-            alert("Reseña enviada con éxito.");
-            document.getElementById("nameInput").value = "";
-            document.getElementById("reviewInput").value = "";
-            selectedRating = 0;
-            document.querySelectorAll('.star').forEach(el => {
-                el.classList.remove('active', 'animate');
-                el.classList.add('inactive');
-            });
+            let average = (totalRating / reviews.length).toFixed(1);
+            let averageStars = "⭐".repeat(Math.round(average)) + "☆".repeat(5 - Math.round(average));
+            averageContainer.innerHTML = `${averageStars} (${average} / 5)`;
         }
+
+        function deleteReview(index) {
+            let reviews = JSON.parse(localStorage.getItem("reviewsJaimeBlanco")) || [];
+            if (confirm("¿Seguro que deseas eliminar esta reseña?")) {
+                reviews.splice(index, 1);
+                localStorage.setItem("reviewsJaimeBlanco", JSON.stringify(reviews));
+                loadReviews(); // Recargar las reseñas actualizadas
+            }
+        }
+
+        window.onload = loadReviews;
     </script>
 </body>
 </html>
