@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inicio de Sesión - Face ID</title>
+  <title>Inicio de Sesión por Voz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,9 +42,6 @@
       border-radius: 10px;
       color: black;
       margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     .btn {
@@ -56,12 +53,11 @@
       cursor: pointer;
       font-size: 18px;
       margin-top: 20px;
-      width: 220px;
     }
 
-    .btn:disabled {
-      background: #aaa;
-      cursor: not-allowed;
+    .btn-volver {
+      background: #555;
+      margin-top: 10px;
     }
 
     footer {
@@ -82,11 +78,11 @@
   </div>
 
   <div class="login-container">
-    <h2>Inicio de Sesión con Face ID</h2>
-    <p>Haz clic para autenticarte con tu rostro, huella o PIN.</p>
-    <button class="btn" id="loginBtn">🔓 Iniciar Sesión Biométrica</button>
-    <button class="btn" id="volverBtn" style="background: #555; margin-top: 10px;">⬅ Volver</button>
-    <p id="message" style="margin-top:20px; font-weight:bold;"></p>
+    <h2>Inicio de Sesión con Voz</h2>
+    <p>Presiona el botón y di la frase secreta: <strong>"abrir sesión"</strong></p>
+    <button class="btn" onclick="iniciarReconocimiento()">🎙️ Hablar</button>
+    <button class="btn btn-volver" onclick="history.back()">⬅ Volver</button>
+    <p id="resultado" style="margin-top: 20px; font-weight: bold;"></p>
   </div>
 
   <footer>
@@ -95,45 +91,48 @@
   </footer>
 
   <script>
-    const loginBtn = document.getElementById('loginBtn');
-    const volverBtn = document.getElementById('volverBtn');
-    const message = document.getElementById('message');
+    function iniciarReconocimiento() {
+      const resultado = document.getElementById("resultado");
 
-    loginBtn.addEventListener('click', async () => {
-      if (!window.PublicKeyCredential) {
-        message.textContent = "Tu navegador no soporta autenticación biométrica (WebAuthn).";
-        message.style.color = "red";
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        resultado.textContent = "Tu navegador no soporta reconocimiento de voz.";
+        resultado.style.color = "red";
         return;
       }
 
-      try {
-        const assertion = await navigator.credentials.get({
-          publicKey: {
-            challenge: Uint8Array.from('1234567890', c => c.charCodeAt(0)), // DEBE venir del servidor
-            timeout: 60000,
-            allowCredentials: [], // También debería venir del servidor
-            userVerification: 'preferred'
-          }
-        });
+      const reconocimiento = new SpeechRecognition();
+      reconocimiento.lang = "es-ES";
+      reconocimiento.interimResults = false;
+      reconocimiento.maxAlternatives = 1;
 
-        console.log("Autenticación exitosa:", assertion);
-        message.textContent = "✅ Autenticación biométrica completada.";
-        message.style.color = "green";
+      resultado.textContent = "🎧 Escuchando...";
+      resultado.style.color = "black";
 
-        // Aquí deberías enviar `assertion` al backend para validación
+      reconocimiento.onresult = (event) => {
+        const texto = event.results[0][0].transcript.toLowerCase();
+        if (texto.includes("abrir sesión")) {
+          resultado.textContent = "✅ Bienvenido, acceso concedido.";
+          resultado.style.color = "green";
 
-      } catch (err) {
-        console.error(err);
-        message.textContent = "❌ Error al autenticar: " + err.message;
-        message.style.color = "red";
-      }
-    });
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1000);
 
-    volverBtn.addEventListener('click', () => {
-      history.back();
-    });
+        } else {
+          resultado.textContent = "❌ Frase incorrecta: " + texto;
+          resultado.style.color = "red";
+        }
+      };
+
+      reconocimiento.onerror = (event) => {
+        resultado.textContent = "❌ Error: " + event.error;
+        resultado.style.color = "red";
+      };
+
+      reconocimiento.start();
+    }
   </script>
 
 </body>
 </html>
-
