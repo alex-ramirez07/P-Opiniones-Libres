@@ -77,11 +77,35 @@
         .star {
             font-size: 30px;
             cursor: pointer;
-            color: gray;
+            color: transparent;
+            position: relative;
+            transition: color 0.3s;
         }
-        .star:hover,
-        .star.active {
+        .star.inactive::before {
+            content: "⚪";
+            color: gray;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 30px;
+            pointer-events: none;
+        }
+        .star.active::before {
+            content: "⭐";
             color: gold;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 30px;
+            pointer-events: none;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        .star.animate::before {
+            animation: pop 0.3s ease;
         }
         .button-container {
             display: flex;
@@ -134,11 +158,11 @@
         
         <h3>Calificación:</h3>
         <div class="rating">
-            <span class="star" onclick="rate(1)">⭐</span>
-            <span class="star" onclick="rate(2)">⭐</span>
-            <span class="star" onclick="rate(3)">⭐</span>
-            <span class="star" onclick="rate(4)">⭐</span>
-            <span class="star" onclick="rate(5)">⭐</span>
+            <span class="star inactive" onclick="rate(1)">⭐</span>
+            <span class="star inactive" onclick="rate(2)">⭐</span>
+            <span class="star inactive" onclick="rate(3)">⭐</span>
+            <span class="star inactive" onclick="rate(4)">⭐</span>
+            <span class="star inactive" onclick="rate(5)">⭐</span>
         </div>
         
         <div class="button-container">
@@ -157,13 +181,18 @@
 
         function rate(stars) {
             selectedRating = stars;
-            document.querySelectorAll('.star').forEach((el, index) => {
-                el.classList.toggle('active', index < stars);
-
-                if (index < stars) {
-                    el.classList.remove('animate'); // Reinicia animación
-                    void el.offsetWidth; // Forzar reflow
+            const starsEls = document.querySelectorAll('.star');
+            starsEls.forEach((el, index) => {
+                if(index < stars){
+                    el.classList.add('active');
+                    el.classList.remove('inactive');
+                    el.classList.remove('animate');
+                    void el.offsetWidth;
                     el.classList.add('animate');
+                } else {
+                    el.classList.remove('active');
+                    el.classList.add('inactive');
+                    el.classList.remove('animate');
                 }
             });
         }
@@ -177,7 +206,7 @@
                 return;
             }
 
-            let reviews = JSON.parse(localStorage.getItem("reviewsLuisSanchez")) || [];
+            let reviews = JSON.parse(localStorage.getItem("reviewsJaimeBlanco")) || [];
 
             reviews.push({
                 name: name,
@@ -185,14 +214,18 @@
                 rating: selectedRating
             });
 
-            localStorage.setItem("reviewsLuisSanchez", JSON.stringify(reviews));
+            localStorage.setItem("reviewsJaimeBlanco", JSON.stringify(reviews));
 
             alert("Reseña enviada con éxito.");
             document.getElementById("nameInput").value = "";
             document.getElementById("reviewInput").value = "";
             selectedRating = 0;
-            document.querySelectorAll('.star').forEach(el => el.classList.remove('active', 'animate'));
+            document.querySelectorAll('.star').forEach(el => {
+                el.classList.remove('active', 'animate');
+                el.classList.add('inactive');
+            });
         }
     </script>
 </body>
 </html>
+
