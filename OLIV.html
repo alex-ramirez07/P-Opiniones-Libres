@@ -88,7 +88,6 @@
     function iniciarReconocimiento() {
       const resultado = document.getElementById("resultado");
 
-      // Verifica si el navegador soporta la API
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
         resultado.textContent = "Tu navegador no soporta reconocimiento de voz.";
@@ -109,6 +108,12 @@
         if (texto.includes("abrir sesión")) {
           resultado.textContent = "✅ Bienvenido, acceso concedido.";
           resultado.style.color = "green";
+
+          // Redirigir después de 1 segundo
+          setTimeout(() => {
+            window.location.href = 'OLP1.html';
+          }, 1000);
+
         } else {
           resultado.textContent = "❌ Frase incorrecta: " + texto;
           resultado.style.color = "red";
@@ -126,3 +131,4 @@
 
 </body>
 </html>
+
