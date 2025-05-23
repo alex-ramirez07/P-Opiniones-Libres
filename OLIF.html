@@ -42,6 +42,9 @@
       border-radius: 10px;
       color: black;
       margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .btn {
@@ -59,11 +62,6 @@
     .btn:disabled {
       background: #aaa;
       cursor: not-allowed;
-    }
-
-    .btn-volver {
-      background: #555;
-      margin-top: 10px;
     }
 
     footer {
@@ -87,7 +85,7 @@
     <h2>Inicio de Sesión con Face ID</h2>
     <p>Haz clic para autenticarte con tu rostro, huella o PIN.</p>
     <button class="btn" id="loginBtn">🔓 Iniciar Sesión Biométrica</button>
-    <button class="btn btn-volver" id="volverBtn">⬅ Volver</button>
+    <button class="btn" id="volverBtn" style="background: #555; margin-top: 10px;">⬅ Volver</button>
     <p id="message" style="margin-top:20px; font-weight:bold;"></p>
   </div>
 
