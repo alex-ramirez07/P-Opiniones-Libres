@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio de Sesión por Voz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #FFFFFF, #E0E0E0);
+      color: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #550000;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      margin-top: 20px;
+      color: white;
+    }
+
+    .header img {
+      width: 50px;
+      margin-right: 15px;
+    }
+
+    .login-container {
+      width: 80%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      color: black;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 15px 25px;
+      background: #8C0000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Escudo_de_la_Universidad_Libre_de_Colombia.svg/2048px-Escudo_de_la_Universidad_Libre_de_Colombia.svg.png" alt="Logo" />
+    <h1>Opiniones Libres</h1>
+  </div>
+
+  <div class="login-container">
+    <h2>Inicio de Sesión con Voz</h2>
+    <p>Presiona el botón y di la frase secreta: <strong>"abrir sesión"</strong></p>
+    <button class="btn" onclick="iniciarReconocimiento()">🎙️ Hablar</button>
+    <p id="resultado" style="margin-top: 20px; font-weight: bold;"></p>
+  </div>
+
+  <footer>
+    <p>Contacto: opinioneslibres@unilibre.edu.co</p>
+    <p>&copy; Opiniones Libres, Estudiantes de 3er semestre, Universidad Libre</p>
+  </footer>
+
+  <script>
+    function iniciarReconocimiento() {
+      const resultado = document.getElementById("resultado");
+
+      // Verifica si el navegador soporta la API
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        resultado.textContent = "Tu navegador no soporta reconocimiento de voz.";
+        resultado.style.color = "red";
+        return;
+      }
+
+      const reconocimiento = new SpeechRecognition();
+      reconocimiento.lang = "es-ES";
+      reconocimiento.interimResults = false;
+      reconocimiento.maxAlternatives = 1;
+
+      resultado.textContent = "🎧 Escuchando...";
+      resultado.style.color = "black";
+
+      reconocimiento.onresult = (event) => {
+        const texto = event.results[0][0].transcript.toLowerCase();
+        if (texto.includes("abrir sesión")) {
+          resultado.textContent = "✅ Bienvenido, acceso concedido.";
+          resultado.style.color = "green";
+        } else {
+          resultado.textContent = "❌ Frase incorrecta: " + texto;
+          resultado.style.color = "red";
+        }
+      };
+
+      reconocimiento.onerror = (event) => {
+        resultado.textContent = "❌ Error: " + event.error;
+        resultado.style.color = "red";
+      };
+
+      reconocimiento.start();
+    }
+  </script>
+
+</body>
+</html>
